@@ -1,0 +1,9 @@
+{
+  "name": "church-connect-backend",
+  "version": "1.0.0",
+  "description": "Backend api for the church web application",
+  "main": "server.js",
+  "repository": "github.com/CSMCW/church-connect-backend.git",
+  "author": "Olamide Williams <circleofwilliams@gmail.com>",
+  "license": "MIT"
+}
