@@ -1,11 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const { sendMessage } = require("./utils/utilityFunctions");
-// const { supabaseClient } = require("./config/supabaseConfig");
-const { authRoute } = require("./routes/authRoutes");
+const morgan = require("morgan");
+const createError = require("http-errors");
+const { sendMessage } = require("./Utils/utilityFunctions");
+const { authRoute } = require("./Routes/authRoutes");
 
 const app = express();
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
