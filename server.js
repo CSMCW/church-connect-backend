@@ -2,21 +2,22 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const { sendMessage } = require("./utils/utilityFunctions");
+// const { supabaseClient } = require("./config/supabaseConfig");
+const { authRoute } = require("./routes/authRoutes");
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
-  res.status(201).json({
-    error: false,
-    message: "Welcome to Church connect backend Api.",
-  });
+  sendMessage(res, 200, false, "Welcome to Church connect backend Api");
 });
 
-app.listen(port, () => {
-  console.log(`Server listening on ${port}`);
+app.use("/auth", authRoute);
+
+app.listen(PORT, () => {
+  console.log(`Server listening on ${PORT}`);
 });
