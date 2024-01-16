@@ -18,6 +18,10 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoute);
 
+app.use((req, res, next) => {
+  sendMessage(res, 404, true, "This route is unavailable!");
+});
+
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
