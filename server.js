@@ -21,7 +21,11 @@ app.get("/", (req, res) => {
 app.use("/auth", authRoute);
 
 app.use((req, res, next) => {
-  sendMessage(res, 404, true, "This route is unavailable!");
+  next(createError.NotFound("This page is unavailable!"));
+});
+
+app.use((error, req, res, next) => {
+  sendMessage(res, error.statusCode || 500, true, error.message);
 });
 
 app.listen(PORT, () => {
