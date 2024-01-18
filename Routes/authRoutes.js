@@ -1,12 +1,15 @@
+require("dotenv").config();
 const { Router } = require("express");
-const { authController } = require("../Controllers/authController");
+const { signup, login, logout } = require("../Controllers/authController");
 const authRoute = Router();
 
 //handling the signup route
-authRoute.post("/signup", authController.signup);
+authRoute.post("/signup", signup);
+
 //handling the login route
-authRoute.post("/login", authController.login);
+authRoute.post("/login", login);
+
 //handling the logout route
-authRoute.delete("/logout", authController.logout);
+authRoute.delete("/logout", logout);
 
 module.exports = { authRoute };

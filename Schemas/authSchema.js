@@ -7,7 +7,7 @@ const name = Joi.string()
   .lowercase();
 const username = Joi.string()
   .min(3)
-  .max(10)
+  .max(25)
   .pattern(/^([a-z]|[A-Z]|[0-9]|_)+$/)
   .lowercase();
 const email = Joi.string().email().lowercase();
