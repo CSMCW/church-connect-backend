@@ -37,7 +37,7 @@ const queryDatabase = async (tablename, column, value) => {
 
     if (Error) {
       console.error('Error fetching from database...', Error.message);
-      throw new createError.InternalServerError();
+      throw Error;
     }
 
     return existingRecord;
@@ -53,7 +53,7 @@ const insertIntoDatabase = async (tablename, data) => {
 
     if (Error) {
       console.error('Error inserting into database', Error.message);
-      throw new createError.InternalServerError();
+      throw Error;
     }
   } catch (error) {
     console.log('Error from insertIntoDatabase', error.message);
@@ -70,6 +70,22 @@ const generateAccessToken = (payload, expiresIn) => {
     console.log('Error from generateAccessToken', error.message);
     throw error;
   }
+};
+
+//token authentication middleware for protected routes
+const authenticateToken = (req, res, next) => {
+  const token = req.cookies.access_token;
+  console.log('all from cookie', req.cookies);
+  const tokenSecret = process.env.ACCESS_TOKEN_SECRET;
+
+  if (token == null) throw new createError.BadRequest();
+
+  jwt.verify(token, tokenSecret, (err, user) => {
+    if (err) throw new createError.Unauthorized();
+    console.log('This is the user gotten from token authentication', user);
+    // req.user = user;
+    next();
+  });
 };
 
 const isValidCredentials = async (username, password) => {
@@ -100,4 +116,5 @@ module.exports = {
   insertIntoDatabase,
   generateAccessToken,
   isValidCredentials,
+  authenticateToken,
 };

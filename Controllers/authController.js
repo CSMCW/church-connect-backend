@@ -13,6 +13,7 @@ const {
   generateAccessToken,
   isValidCredentials,
 } = require('../Utils/utilityFunctions');
+const { sendEmail } = require('../Utils/sendEmail');
 
 const signup = async (req, res, next) => {
   try {
@@ -98,13 +99,31 @@ const login = async (req, res, next) => {
 };
 
 //logout controller
-const logout = (req, res, next) => {
+const logout = async (req, res, next) => {
   try {
-    res.send('logout');
+    res.clearCookie('access_token');
+    sendMessage(res, 204, false, 'logged out.');
   } catch (error) {
     console.error('Error from logout:', error.message);
     next(error);
   }
 };
 
-module.exports = { signup, login, logout };
+// reset password routes handling.. send reset password link to the user.
+// const resetPassword = async (req, res, next) => {
+//   const mailOptions = {
+//     name: 'Taiwo Babs',
+//     reason: 'You are training Olamide to be a better developer kissess....',
+//     reciever: 'babsman4all@gm.com',
+//     subject: 'Your boy is doing this for the first time. Thank you boss!',
+//   };
+//   const sentEmail = await sendEmail(mailOptions);
+//   console.log('sent email:', sentEmail);
+//   if (sentEmail) sendMessage(res, 204, false, 'you should recieve an email');
+//   else {
+//     console.error('Error sentEmail is false', sentEmail);
+//     throw new createError.InternalServerError();
+//   }
+// };
+
+module.exports = { signup, login, logout, resetPassword };
