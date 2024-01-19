@@ -126,4 +126,4 @@ const logout = async (req, res, next) => {
 //   }
 // };
 
-module.exports = { signup, login, logout, resetPassword };
+module.exports = { signup, login, logout };

@@ -75,15 +75,13 @@ const generateAccessToken = (payload, expiresIn) => {
 //token authentication middleware for protected routes
 const authenticateToken = (req, res, next) => {
   const token = req.cookies.access_token;
-  console.log('all from cookie', req.cookies);
   const tokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
   if (token == null) throw new createError.BadRequest();
 
   jwt.verify(token, tokenSecret, (err, user) => {
     if (err) throw new createError.Unauthorized();
-    console.log('This is the user gotten from token authentication', user);
-    // req.user = user;
+    req.username = user.username;
     next();
   });
 };
