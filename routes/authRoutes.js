@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Router } = require('express');
-const { authenticateToken } = require('../Utils/utilityFunctions');
+const { authenticateToken } = require('../utils/utilityFunctions');
 const { signup, login, logout } = require('../Controllers/authController');
 const authRoute = Router();
 

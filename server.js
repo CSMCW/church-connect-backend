@@ -3,8 +3,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const createError = require('http-errors');
-const { sendMessage } = require('./Utils/utilityFunctions');
-const { authRoute } = require('./Routes/authRoutes');
+const { sendMessage } = require('./utils/utilityFunctions');
+const { authRoute } = require('./routes/authRoutes');
 
 const app = express();
 app.use(morgan('dev'));

@@ -8,7 +8,8 @@ const name = Joi.string()
 const username = Joi.string()
   .min(3)
   .max(25)
-  .pattern(/^([a-z]|[A-Z]|[0-9]|_)+$/);
+  .pattern(/^([a-z]|[A-Z]|[0-9]|_)+$/)
+  .lowercase();
 const email = Joi.string().email().lowercase();
 const password = Joi.string()
   .min(6)

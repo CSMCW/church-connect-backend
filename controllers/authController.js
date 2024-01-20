@@ -3,7 +3,7 @@ const createError = require('http-errors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const { authValidator } = require('../Schemas/authSchema');
+const { authValidator } = require('../schemas/authSchema');
 const { supabaseClient } = require('../Config/supabaseConfig');
 const {
   sendMessage,
@@ -12,8 +12,8 @@ const {
   insertIntoDatabase,
   generateAccessToken,
   isValidCredentials,
-} = require('../Utils/utilityFunctions');
-const { sendEmail } = require('../Utils/sendEmail');
+} = require('../utils/utilityFunctions');
+const { sendEmail } = require('../utils/sendEmail');
 
 const signup = async (req, res, next) => {
   try {

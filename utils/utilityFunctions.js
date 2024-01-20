@@ -1,13 +1,22 @@
 require('dotenv').config();
-const { supabaseClient } = require('../Config/supabaseConfig');
+const { supabaseClient } = require('../config/supabaseConfig');
 const createError = require('http-errors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const sendMessage = (res, statusCode, errorMsg, msgContent, data) => {
+  const successCode = [200, 201, 202, 204, 206];
+  if (successCode.includes(statusCode)) {
+    res
+      .status(statusCode)
+      .json({ status: true, message: msgContent, data: data || {} });
+
+    return;
+  }
   if (!statusCode || statusCode === 500) {
     msgContent = 'Internal Server Error.';
   }
+
   res
     .status(statusCode)
     .json({ error: errorMsg, message: msgContent, data: data || {} });
