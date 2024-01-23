@@ -47,17 +47,10 @@ const sendEmail = async (mailParameters) => {
 
     //   Send the mail
     return await mailTransporter.sendMail(message);
-    // .then(() => {
-    //   console.log('sent')
-    //   return true;
-    // })
-    // .catch((error) => {
-    //   console.error('Error sending the mail', error.message);
-    //   throw error;
-    // });
   } catch (error) {
     console.error('Error from sendEmail:', error.messa);
     throw error;
   }
 };
+
 module.exports = { sendEmail };

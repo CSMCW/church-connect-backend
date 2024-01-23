@@ -1,18 +1,17 @@
-const Joi = require('joi');
+require('dotenv').config();
 const createError = require('http-errors');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 const { authValidator } = require('../schemas/authSchema');
-const { supabaseClient } = require('../Config/supabaseConfig');
 const {
   sendMessage,
-  encryptPassword,
   queryDatabase,
   insertIntoDatabase,
+} = require('../utils/database');
+const {
+  encryptPassword,
   generateAccessToken,
   isValidCredentials,
-} = require('../utils/utilityFunctions');
+} = require('../utils/auth');
 const { sendEmail } = require('../utils/sendEmail');
 
 const signup = async (req, res, next) => {

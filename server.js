@@ -3,7 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const createError = require('http-errors');
-const { sendMessage } = require('./utils/utilityFunctions');
+const { sendMessage } = require('./utils/database');
 const { authRoute } = require('./routes/authRoutes');
 
 const app = express();

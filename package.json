@@ -4,8 +4,7 @@
   "description": "Backend api for the church web application",
   "main": "server.js",
   "scripts": {
-    "test": "nodemon server.js",
-    "start": "node server.js"
+    "dev": "nodemon server.js"
   },
   "repository": "github.com/CSMCW/church-connect-backend.git",
   "author": "Olamide Williams <circleofwilliams@gmail.com>",

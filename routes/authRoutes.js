@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Router } = require('express');
-const { authenticateToken } = require('../utils/utilityFunctions');
-const { signup, login, logout } = require('../Controllers/authController');
+const { authenticateToken } = require('../utils/auth');
+const { signup, login, logout } = require('../controllers/authController');
 const authRoute = Router();
 
 //handling the signup route

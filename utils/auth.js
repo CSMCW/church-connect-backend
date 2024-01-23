@@ -1,26 +1,9 @@
 require('dotenv').config();
-const { supabaseClient } = require('../config/supabaseConfig');
 const createError = require('http-errors');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
-const sendMessage = (res, statusCode, errorMsg, msgContent, data) => {
-  const successCode = [200, 201, 202, 204, 206];
-  if (successCode.includes(statusCode)) {
-    res
-      .status(statusCode)
-      .json({ status: true, message: msgContent, data: data || {} });
-
-    return;
-  }
-  if (!statusCode || statusCode === 500) {
-    msgContent = 'Internal Server Error.';
-  }
-
-  res
-    .status(statusCode)
-    .json({ error: errorMsg, message: msgContent, data: data || {} });
-};
+const { queryDatabase } = require('./database');
 
 const encryptPassword = async (password) => {
   try {
@@ -33,39 +16,6 @@ const encryptPassword = async (password) => {
     return hash;
   } catch (error) {
     console.error('Error from encryptPassword:', error.message);
-    throw error;
-  }
-};
-
-const queryDatabase = async (tablename, column, value) => {
-  try {
-    const { data: existingRecord, error: Error } = await supabaseClient
-      .from(tablename)
-      .select()
-      .eq(column, value);
-
-    if (Error) {
-      console.error('Error fetching from database...', Error.message);
-      throw Error;
-    }
-
-    return existingRecord;
-  } catch (error) {
-    console.error('Error from queryDatabase: ', error.message);
-    throw error;
-  }
-};
-
-const insertIntoDatabase = async (tablename, data) => {
-  try {
-    const { error: Error } = await supabaseClient.from(tablename).insert(data);
-
-    if (Error) {
-      console.error('Error inserting into database', Error.message);
-      throw Error;
-    }
-  } catch (error) {
-    console.log('Error from insertIntoDatabase', error.message);
     throw error;
   }
 };
@@ -117,11 +67,8 @@ const isValidCredentials = async (username, password) => {
 };
 
 module.exports = {
-  sendMessage,
   encryptPassword,
-  queryDatabase,
-  insertIntoDatabase,
   generateAccessToken,
-  isValidCredentials,
   authenticateToken,
+  isValidCredentials,
 };
