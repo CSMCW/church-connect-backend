@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { supabaseClient } = require('../config/supabaseConfig');
-
+const { logWriter } = require('./logger');
 
 const sendMessage = (res, statusCode, errorMsg, msgContent, data) => {
   const successCode = [200, 201, 202, 204, 206];
@@ -28,13 +28,12 @@ const queryDatabase = async (tablename, column, value) => {
       .eq(column, value);
 
     if (Error) {
-      console.error('Error fetching from database...', Error.message);
+      logWriter('Error from database query', 'errorsLogs.log');
       throw Error;
     }
 
     return existingRecord;
   } catch (error) {
-    console.error('Error from queryDatabase: ', error.message);
     throw error;
   }
 };
@@ -44,7 +43,7 @@ const insertIntoDatabase = async (tablename, data) => {
     const { error: Error } = await supabaseClient.from(tablename).insert(data);
 
     if (Error) {
-      console.error('Error inserting into database', Error.message);
+      logWriter('Error inserting into database.', 'errorsLogs.log');
       throw Error;
     }
   } catch (error) {

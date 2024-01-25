@@ -2,17 +2,21 @@ require('dotenv').config();
 const createError = require('http-errors');
 
 const { authValidator } = require('../schemas/authSchema');
+
 const {
   sendMessage,
   queryDatabase,
   insertIntoDatabase,
 } = require('../utils/database');
+
 const {
   encryptPassword,
   generateAccessToken,
   isValidCredentials,
 } = require('../utils/auth');
-const { sendEmail } = require('../utils/sendEmail');
+
+const { logWriter } = require('../utils/logger');
+// const { sendEmail } = require('../utils/sendEmail');
 
 const signup = async (req, res, next) => {
   try {
@@ -33,8 +37,9 @@ const signup = async (req, res, next) => {
       validatedResult.username,
     );
 
-    if (existingUsername.length > 0)
+    if (existingUsername.length > 0) {
       throw new createError.Conflict('username already exists!');
+    }
 
     //checking if email exist in the database
     const existingEmail = await queryDatabase(
@@ -43,8 +48,9 @@ const signup = async (req, res, next) => {
       validatedResult.email,
     );
 
-    if (existingEmail.length > 0)
+    if (existingEmail.length > 0) {
       throw new createError.Conflict('email already exists!');
+    }
 
     //encryting the password.
     validatedResult.password = await encryptPassword(validatedResult.password);
@@ -55,7 +61,7 @@ const signup = async (req, res, next) => {
     //success message on saving the database
     sendMessage(res, 201, false, 'Created successfully');
   } catch (error) {
-    console.error('Error from signup:', error.message);
+    logWriter('Error from signup controller.', 'errorsLogs.log');
     next(error);
   }
 };
@@ -92,7 +98,7 @@ const login = async (req, res, next) => {
       throw new createError.Unauthorized();
     }
   } catch (error) {
-    console.error('Error from login:', error.message);
+    logWriter('Error from login controller', 'errorsLogs.log');
     next(error);
   }
 };
@@ -103,7 +109,7 @@ const logout = async (req, res, next) => {
     res.clearCookie('access_token');
     sendMessage(res, 204, false, 'logged out.');
   } catch (error) {
-    console.error('Error from logout:', error.message);
+    logWriter('Error from logout controller', 'errorsLogs.log');
     next(error);
   }
 };

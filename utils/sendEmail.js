@@ -48,7 +48,7 @@ const sendEmail = async (mailParameters) => {
     //   Send the mail
     return await mailTransporter.sendMail(message);
   } catch (error) {
-    console.error('Error from sendEmail:', error.messa);
+    logWriter('Error sending email.', 'errorsLogs.log');
     throw error;
   }
 };

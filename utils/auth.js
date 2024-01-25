@@ -3,6 +3,7 @@ const createError = require('http-errors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
+const { logWriter } = require('../utils/logger');
 const { queryDatabase } = require('./database');
 
 const encryptPassword = async (password) => {
@@ -10,12 +11,11 @@ const encryptPassword = async (password) => {
     const saltRounds = 10;
     const hash = await bcrypt.hash(password, saltRounds);
     if (!hash) {
-      console.log('Password is not hashed...');
+      logWriter('Error hashing password', 'errorsLogs.log');
       throw new createError.InternalServerError();
     }
     return hash;
   } catch (error) {
-    console.error('Error from encryptPassword:', error.message);
     throw error;
   }
 };
@@ -26,7 +26,6 @@ const generateAccessToken = (payload, expiresIn) => {
     const token = jwt.sign(payload, tokenSecret, { expiresIn });
     return token;
   } catch (error) {
-    console.log('Error from generateAccessToken', error.message);
     throw error;
   }
 };
@@ -61,7 +60,6 @@ const isValidCredentials = async (username, password) => {
       return false;
     }
   } catch (error) {
-    console.error('Error from isValidCredentials', error.message);
     throw error;
   }
 };
