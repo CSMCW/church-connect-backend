@@ -7,27 +7,19 @@ const { logWriter } = require('../utils/logger');
 const { queryDatabase } = require('./database');
 
 const encryptPassword = async (password) => {
-  try {
-    const saltRounds = 10;
-    const hash = await bcrypt.hash(password, saltRounds);
-    if (!hash) {
-      logWriter('Error hashing password', 'errorsLogs.log');
-      throw new createError.InternalServerError();
-    }
-    return hash;
-  } catch (error) {
-    throw error;
+  const saltRounds = 10;
+  const hash = await bcrypt.hash(password, saltRounds);
+  if (!hash) {
+    logWriter('Error hashing password', 'errorsLogs.log');
+    throw new createError.InternalServerError();
   }
+  return hash;
 };
 
 const generateAccessToken = (payload, expiresIn) => {
-  try {
-    const tokenSecret = process.env.ACCESS_TOKEN_SECRET;
-    const token = jwt.sign(payload, tokenSecret, { expiresIn });
-    return token;
-  } catch (error) {
-    throw error;
-  }
+  const tokenSecret = process.env.ACCESS_TOKEN_SECRET;
+  const token = jwt.sign(payload, tokenSecret, { expiresIn });
+  return token;
 };
 
 //token authentication middleware for protected routes
@@ -46,21 +38,18 @@ const authenticateToken = (req, res, next) => {
 
 const isValidCredentials = async (username, password) => {
   //checking if the user is in the database
-  try {
-    const existingUser = await queryDatabase('users', 'username', username);
 
-    if (existingUser.length > 0) {
-      const validPassword = await bcrypt.compare(
-        password,
-        existingUser[0].password,
-      );
-      if (validPassword) {
-        return true;
-      }
-      return false;
+  const existingUser = await queryDatabase('users', 'username', username);
+
+  if (existingUser.length > 0) {
+    const validPassword = await bcrypt.compare(
+      password,
+      existingUser[0].password,
+    );
+    if (validPassword) {
+      return true;
     }
-  } catch (error) {
-    throw error;
+    return false;
   }
 };
 

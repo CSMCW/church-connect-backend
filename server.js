@@ -32,7 +32,7 @@ app.use((req, res, next) => {
   next(createError.NotFound('This page is unavailable!'));
 });
 
-app.use((error, req, res, next) => {
+app.use((error, req, res) => {
   const message = `${error.name}:, ${error.message}`;
   logWriter(message, 'errorsLogs.log');
   sendMessage(res, error.statusCode || 500, true, error.message);

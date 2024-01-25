@@ -4,7 +4,10 @@
   "description": "Backend api for the church web application",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
+    "lint-init": "eslint --init"
   },
   "repository": "github.com/CSMCW/church-connect-backend.git",
   "author": "Olamide Williams <circleofwilliams@gmail.com>",
@@ -25,6 +28,12 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.5.0"
   }
+
 }
