@@ -1,6 +1,7 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 const mailGen = require('mailgen');
+const { logWriter } = require('./logger');
 
 const sendEmail = async (mailParameters) => {
   try {

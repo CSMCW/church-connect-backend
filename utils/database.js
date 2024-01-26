@@ -21,34 +21,25 @@ const sendMessage = (res, statusCode, errorMsg, msgContent, data) => {
 };
 
 const queryDatabase = async (tablename, column, value) => {
-  try {
-    const { data: existingRecord, error: Error } = await supabaseClient
-      .from(tablename)
-      .select()
-      .eq(column, value);
+  const { data: existingRecord, error: Error } = await supabaseClient
+    .from(tablename)
+    .select()
+    .eq(column, value);
 
-    if (Error) {
-      logWriter('Error from database query', 'errorsLogs.log');
-      throw Error;
-    }
-
-    return existingRecord;
-  } catch (error) {
-    throw error;
+  if (Error) {
+    logWriter('Error from database query', 'errorsLogs.log');
+    throw Error;
   }
+
+  return existingRecord;
 };
 
 const insertIntoDatabase = async (tablename, data) => {
-  try {
-    const { error: Error } = await supabaseClient.from(tablename).insert(data);
+  const { error: Error } = await supabaseClient.from(tablename).insert(data);
 
-    if (Error) {
-      logWriter('Error inserting into database.', 'errorsLogs.log');
-      throw Error;
-    }
-  } catch (error) {
-    console.log('Error from insertIntoDatabase', error.message);
-    throw error;
+  if (Error) {
+    logWriter('Error inserting into database.', 'errorsLogs.log');
+    throw Error;
   }
 };
 
