@@ -5,5 +5,22 @@
   "main": "server.js",
   "repository": "github.com/CSMCW/church-connect-backend.git",
   "author": "Olamide Williams <circleofwilliams@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+
+  "scripts": {
+    "lint-init": "eslint --init",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix ."
+  },
+
+
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.5.0"
+  }
+
 }
