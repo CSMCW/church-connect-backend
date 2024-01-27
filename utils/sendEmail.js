@@ -30,6 +30,7 @@ const sendEmail = async (mailParameters) => {
           mailParameters.reason,
         action: mailParameters.action || null,
         outro:
+          mailParameters.outro ||
           'Need help or have questions? Just reply to this mail and we will be glad to help you.',
       },
     };

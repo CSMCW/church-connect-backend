@@ -16,7 +16,7 @@ const encryptPassword = async (password) => {
   return hash;
 };
 
-const generateAccessToken = (payload, expiresIn) => {
+const generateToken = (payload, expiresIn) => {
   const tokenSecret = process.env.ACCESS_TOKEN_SECRET;
   const token = jwt.sign(payload, tokenSecret, { expiresIn });
   return token;
@@ -47,13 +47,13 @@ const isValidCredentials = async (username, password) => {
     if (validPassword) {
       return true;
     }
-    return false;
   }
+  return false;
 };
 
 module.exports = {
   encryptPassword,
-  generateAccessToken,
+  generateToken,
   authenticateToken,
   isValidCredentials,
 };
