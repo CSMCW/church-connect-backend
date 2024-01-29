@@ -43,8 +43,23 @@ const insertIntoDatabase = async (tablename, data) => {
   }
 };
 
+const updateDatabase = async (tablename, data, column, columnValue) => {
+  const { error: Error } = await supabaseClient
+    .from(tablename)
+    .update(data)
+    .eq(column, columnValue);
+
+  if (Error) {
+    logWriter('Error updating database.', 'errorsLogs.log');
+    throw Error;
+  }
+
+  return true;
+};
+
 module.exports = {
   sendMessage,
   queryDatabase,
   insertIntoDatabase,
+  updateDatabase,
 };

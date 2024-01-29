@@ -20,7 +20,7 @@ authRoute.post('/login', login);
 authRoute.post('/forgotPassword', forgotPassword);
 
 //handling password reset
-authRoute.post('/passwordReset/:token', resetPassword);
+authRoute.patch('/resetPassword/:token', resetPassword);
 
 //handling the logout route
 authRoute.delete('/logout', authenticateToken, logout);

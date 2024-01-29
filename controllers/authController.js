@@ -7,11 +7,13 @@ const {
   sendMessage,
   queryDatabase,
   insertIntoDatabase,
+  updateDatabase,
 } = require('../utils/database');
 
 const {
   encryptPassword,
   generateToken,
+  verifiedToken,
   isValidCredentials,
 } = require('../utils/auth');
 
@@ -139,22 +141,22 @@ const forgotPassword = async (req, res, next) => {
 
     //if email exist, proceed with sending mail else return error.
     if (existingUser.length > 0) {
-      const payload = { username: validatedResult.username };
-      const expiresIn = 15 * 60 * 60;
+      const payload = { username: existingUser[0].username };
+      const expiresIn = 15 * 60;
       const resetToken = generateToken(payload, expiresIn);
       const reseturl = `${req.protocol}://${req.get(
         'host',
       )}/auth/resetPassword/${resetToken}`;
       const mailOptions = {
-        reciever: `${existingUser.email}`,
-        name: `${existingUser.firstname}`,
+        reciever: existingUser[0].email,
+        name: existingUser[0].firstname,
         subject: 'Password Reset',
         reason: 'we recieved a password reset request on your account.',
         action: {
           instructions: 'Click the button below to reset your password:',
           button: {
             color: '#22BC66',
-            text: 'Confirm your account',
+            text: 'Reset your password',
             link: reseturl,
           },
         },
@@ -163,7 +165,7 @@ const forgotPassword = async (req, res, next) => {
       };
       const sentEmail = await sendEmail(mailOptions);
       if (sentEmail)
-        sendMessage(res, 204, false, 'you should recieve an email');
+        sendMessage(res, 200, false, 'you should recieve an email');
       else {
         logWriter('Error sending email: ', 'errorsLogs.log');
         throw new createError.InternalServerError();
@@ -177,6 +179,52 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 
-const resetPassword = async () => {};
+const resetPassword = async (req, res, next) => {
+  try {
+    if (req.params.token) {
+      //check if token is correct
+      if (await verifiedToken(req, req.params.token)) {
+        // validating users data from request body
+        let { value: validatedResult, error: validationError } =
+          authValidator.resetPasswordSchema.validate(req.body);
+
+        if (validationError) {
+          throw new createError.UnprocessableEntity(
+            `Cannot process your data, ${validationError.details[0].message}`,
+          );
+        }
+
+        //checking if user exists in database
+        const user = await queryDatabase('users', 'username', req.username);
+        if (user.length > 0) {
+          const newPassword = await encryptPassword(validatedResult.password);
+          const dataToUpdate = { password: newPassword };
+          //updating the value in the databse... remember to restructure this functin parameters!!!
+          const updated = await updateDatabase(
+            'users',
+            dataToUpdate,
+            'username',
+            user[0].username,
+          );
+          if (updated) {
+            return sendMessage(
+              res,
+              200,
+              false,
+              'password updated successfully',
+            );
+          }
+        } else {
+          throw new createError.Unauthorized('User does not exist');
+        }
+      }
+    }
+    //throw unauthorize error if no token as parameter
+    throw new createError.Unauthorized();
+  } catch (error) {
+    logWriter('Error from reset password controller', 'errorsLogs.log');
+    next(error);
+  }
+};
 
 module.exports = { signup, login, forgotPassword, resetPassword, logout };

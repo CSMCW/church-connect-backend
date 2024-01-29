@@ -8,7 +8,10 @@ const { sendMessage } = require('./utils/database');
 const { authRoute } = require('./routes/authRoutes');
 const { logWriter } = require('./utils/logger');
 
+// creating an app instance
 const app = express();
+
+//setting middlewares that works before response is sent...
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
@@ -20,24 +23,34 @@ app.use((req, res, next) => {
   next();
 });
 
+//port is an environment variable or 6244
 const PORT = process.env.PORT || 6244;
+//interface to run server
+const INTERFACE = '192.168.43.11';
 
+//handling home route
 app.get('/', (req, res) => {
   sendMessage(res, 200, false, 'Welcome to Church connect backend Api');
 });
 
+//handling all routes with /auth..
 app.use('/auth', authRoute);
 
+//handling not found routes
 app.use((req, res, next) => {
-  next(createError.NotFound('This page is unavailable!'));
+  next(new createError.NotFound('This page is unavailable!'));
 });
 
-app.use((error, req, res) => {
+//error handler
+app.use((error, req, res, next) => {
   const message = `${error.name}:, ${error.message}`;
+
   logWriter(message, 'errorsLogs.log');
+
   sendMessage(res, error.statusCode || 500, true, error.message);
 });
 
-app.listen(PORT, () => {
+//starting the server
+app.listen(PORT, INTERFACE, () => {
   console.log(`Server listening on ${PORT}`);
 });

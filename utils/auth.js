@@ -23,17 +23,41 @@ const generateToken = (payload, expiresIn) => {
 };
 
 //token authentication middleware for protected routes
-const authenticateToken = (req, res, next) => {
+const authenticateToken = async (req, res, next) => {
   const token = req.cookies.access_token;
   const tokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
   if (token == null) throw new createError.BadRequest();
 
-  jwt.verify(token, tokenSecret, (err, user) => {
-    if (err) throw new createError.Unauthorized();
+  try {
+    const user = await jwt.verify(token, tokenSecret);
     req.username = user.username;
     next();
-  });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//general token verification
+const verifiedToken = async (req, token) => {
+  const tokenSecret = process.env.ACCESS_TOKEN_SECRET;
+
+  try {
+    const user = await jwt.verify(token, tokenSecret);
+    req.username = user.username;
+    return true;
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      throw new createError.Unauthorized('Token expired');
+    }
+    throw new createError.Unauthorized('Invalid token');
+  }
+
+  // jwt.verify(token, tokenSecret, (err, user) => {
+  //   if (err) throw new createError.Unauthorized();
+  //   req.username = user.username;
+  //   return true;
+  // });
 };
 
 const isValidCredentials = async (username, password) => {
@@ -55,5 +79,6 @@ module.exports = {
   encryptPassword,
   generateToken,
   authenticateToken,
+  verifiedToken,
   isValidCredentials,
 };
