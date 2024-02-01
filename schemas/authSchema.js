@@ -43,13 +43,6 @@ const authValidator = {
   resetPasswordSchema: Joi.object().keys({
     password: password.required(),
   }),
-
-  //resetpassword link parameter validatior
-  // resetPasswordParameter: Joi.object().keys({
-  //   token: Joi.string().pattern(
-  //     new RegExp('^[a-zA-Z0-9]+.[a-zA-Z0-9]+.[a-zA-Z0-9_]+$'),
-  //   ),
-  // }),
 };
 
-module.exports = { authValidator };
+module.exports = authValidator;
