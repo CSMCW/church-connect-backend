@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
 
 //health check when deployed
 app.get('/health', (req, res) => {
-  return res.status(200);
+  return res.status(200).end();
 });
 
 //handling all routes with /auth/...
