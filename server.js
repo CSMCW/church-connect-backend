@@ -36,6 +36,11 @@ app.get('/', (req, res) => {
   helpers.sendMessage(res, messageOptions);
 });
 
+//health check when deployed
+app.get('/health', (req, res) => {
+  return res.status(200);
+});
+
 //handling all routes with /auth/...
 app.use('/auth', authRoute);
 
