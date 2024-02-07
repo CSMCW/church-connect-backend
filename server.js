@@ -24,8 +24,6 @@ app.use(helpers.requestLogger);
 
 //port is an environment variable or 6244.
 const PORT = process.env.PORT || 6244;
-//interface to run server
-const INTERFACE = '127.0.0.1';
 
 //handling home route
 app.get('/', (req, res) => {
@@ -61,6 +59,6 @@ app.use((req, res, next) => {
 app.use(helpers.errorHandler);
 
 //starting the server
-app.listen(PORT, INTERFACE, () => {
+app.listen(PORT, () => {
   console.log(`Server listening on http://${INTERFACE}:${PORT}`);
 });
