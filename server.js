@@ -60,5 +60,5 @@ app.use(helpers.errorHandler);
 
 //starting the server
 app.listen(PORT, () => {
-  console.log(`Server listening on http://${INTERFACE}:${PORT}`);
+  console.log(`Server listening...`);
 });
