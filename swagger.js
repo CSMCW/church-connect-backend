@@ -576,11 +576,17 @@ const options = {
             },
             telephoneNumber: {
               type: 'array',
+              items: {
+                type: 'string',
+              },
               description:
                 'An array of telephone numbers available in the district',
             },
             email: {
               type: 'array',
+              items: {
+                type: 'string',
+              },
               description: 'An array of emails availabe in the district',
             },
           },
@@ -652,8 +658,8 @@ const options = {
         },
       },
     },
-    apis: ['./routes/*.js'],
   },
+  apis: ['./routes/*.js'],
 };
 
 module.exports = options;
