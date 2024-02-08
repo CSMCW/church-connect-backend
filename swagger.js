@@ -386,6 +386,33 @@ const options = {
         },
       },
       '/districts/:districtName': {
+        get: {
+          tags: ['DISTRICTS'],
+          summary: 'Getting a single district with name',
+          responses: {
+            200: {
+              description: 'Success',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/successMessage',
+                  },
+                },
+              },
+            },
+
+            500: {
+              description: 'Internal server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+          },
+        },
         put: {
           tags: ['DISTRICTS'],
           summary: 'Editing a district that already exists',
