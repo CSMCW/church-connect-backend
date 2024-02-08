@@ -10,13 +10,13 @@ const errorLog = 'errorsLogs.log';
 
 //ecrypt password to create a hash
 const encryptPassword = async (password) => {
-  const saltRounds = 10;
-  const hash = await bcrypt.hash(password, saltRounds);
-  if (!hash) {
-    logWriter('Error hashing password', errorLog);
-    throw new createError.InternalServerError();
-  } else {
+  try {
+    const saltRounds = 10;
+    const hash = await bcrypt.hash(password, saltRounds);
     return hash;
+  } catch (error) {
+    logWriter('Error hashing password', errorLog);
+    throw new createError.InternalServerError('Error hashing password');
   }
 };
 
@@ -37,7 +37,9 @@ const authenticateToken = async (req, res, next) => {
   const token = req.cookies.access_token;
   const tokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
-  if (token == null) throw new createError.BadRequest('No authorization token');
+  if (token == null) {
+    return next(new createError.BadRequest('No authorization token'));
+  }
 
   try {
     const user = await jwt.verify(token, tokenSecret);
@@ -45,9 +47,9 @@ const authenticateToken = async (req, res, next) => {
     next();
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
-      throw new createError.Unauthorized('Token expired');
+      return next(new createError.Unauthorized('Token expired'));
     }
-    throw new createError.Unauthorized('Invalid token');
+    return next(new createError.Unauthorized('Invalid token'));
   }
 };
 

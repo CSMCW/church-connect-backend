@@ -82,10 +82,11 @@ const deleteRowFromDatabase = async (deleteOptions) => {
 
 //updating an entire row on database
 const updateRowOnDatabase = async (updateOptions) => {
+  console.log(updateOptions.data);
   const { error: Error } = await supabaseClient
     .from(updateOptions.tableName)
     .update(updateOptions.data)
-    .eq(updateOptions.column, updateOptions.value);
+    .match(updateOptions.match);
 
   if (Error) {
     logWriter('Error updating row on database.', 'errorsLogs.log');

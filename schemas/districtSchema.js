@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const name = Joi.string()
-  .pattern(/^([a-z]|[A-Z])+$/)
+  .pattern(/^([a-z]|[A-Z]| |,|_|-)+$/)
   .min(3)
   .max(50)
   .lowercase();

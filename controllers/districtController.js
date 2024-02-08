@@ -26,6 +26,31 @@ const getDistricts = async (req, res, next) => {
   }
 };
 
+//controller for getting specific district
+const getSpecificDistrict = async (req, res, next) => {
+  try {
+    const districtName = req.params.districtName;
+    const queryOptions = {
+      tableName,
+      column: 'districtName',
+      columnValue: districtName,
+    };
+    // querying database for all districts
+    const existingData = await dbHelpers.queryDatabase(queryOptions);
+
+    //return the data to the client
+    const messageOptions = {
+      statusCode: 200,
+      msgContent: 'Request successful',
+      data: existingData[0],
+    };
+    helpers.sendMessage(res, messageOptions);
+  } catch (error) {
+    logWriter('Error from getDistricts controller.', 'errorsLogs.log');
+    next(error);
+  }
+};
+
 //adding a new district
 const addDistrict = async (req, res, next) => {
   try {
@@ -112,19 +137,18 @@ const editDistrict = async (req, res, next) => {
       );
     }
 
-    const districtName = req.params.districtName;
+    const oldDistrictName = req.params.districtName;
     const dbQueryOPtions = {
       tableName,
-      column: 'districts',
-      columnValue: districtName,
+      column: 'districtName',
+      columnValue: oldDistrictName,
     };
-    const existingData = dbHelpers.queryDatabase(dbQueryOPtions);
-    if (existingData > 0) {
+    const existingData = await dbHelpers.queryDatabase(dbQueryOPtions);
+    if (existingData.length > 0) {
       const updateOptions = {
         tableName,
         data: validatedResult,
-        column: 'districtName',
-        columnValue: districtName,
+        match: { districtName: oldDistrictName },
       };
 
       const updated = await dbHelpers.updateRowOnDatabase(updateOptions);
@@ -146,6 +170,7 @@ const editDistrict = async (req, res, next) => {
 
 const districtControllers = {
   getDistricts,
+  getSpecificDistrict,
   addDistrict,
   editDistrict,
   deleteDistrict,

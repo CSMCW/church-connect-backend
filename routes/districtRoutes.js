@@ -7,6 +7,9 @@ const districtRoute = Router();
 //handling getting all districts
 districtRoute.get('/', districtControllers.getDistricts);
 
+//handling getting a specific district
+districtRoute.get('/:districtName', districtControllers.getSpecificDistrict);
+
 //handling adding a new district
 districtRoute.post(
   '/newDistrict',
