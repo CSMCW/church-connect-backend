@@ -8,6 +8,7 @@ const swaggerUi = require('swagger-ui-express');
 
 const helpers = require('./utils/helpers');
 const authRoute = require('./routes/authRoutes');
+const districtRoute = require('./routes/districtRoutes');
 const swaggerDocs = require('./swagger');
 
 // creating an app instance.
@@ -41,6 +42,9 @@ app.get('/health', (req, res) => {
 
 //handling all routes with /auth/...
 app.use('/auth', authRoute);
+
+//handling all routes with /districts/...
+app.use('/districts', districtRoute);
 
 //handling documentation route.
 const swaggerOptions = swaggerJsdoc(swaggerDocs);

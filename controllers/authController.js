@@ -222,7 +222,7 @@ const resetPassword = async (req, res, next) => {
         const user = await dbHelpers.queryDatabase(dbQueryOPtions);
         if (user.length > 0) {
           const newPassword = await authHelpers.encryptPassword(
-            validatedResult.password,
+            validatedResult.newPassword,
           );
           const dataToUpdate = { password: newPassword };
           //updating the value in the databse... remember to restructure this functin parameters!!!
