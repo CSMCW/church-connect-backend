@@ -38,6 +38,11 @@ const getSpecificDistrict = async (req, res, next) => {
     // querying database for all districts
     const existingData = await dbHelpers.queryDatabase(queryOptions);
 
+    //if district does not exists, throw error
+    if (existingData.length == 0) {
+      throw new createError.BadRequest('District does not exists.');
+    }
+
     //return the data to the client
     const messageOptions = {
       statusCode: 200,
