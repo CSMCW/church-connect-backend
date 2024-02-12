@@ -19,6 +19,10 @@ const options = {
         description:
           'All authentication and authorization related controllers.',
       },
+      {
+        name: 'DISTRICTS',
+        description: 'All routes that deals with districts related activities',
+      },
     ],
     paths: {
       '/auth/signup': {
@@ -141,27 +145,27 @@ const options = {
         delete: {
           tags: ['AUTH'],
           summary: 'Logging out a user.',
-        },
-        responses: {
-          204: {
-            description: 'Successful logout',
-          },
-          401: {
-            description: 'Unauthorized access',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/errorMessage',
+          responses: {
+            204: {
+              description: 'Successful logout',
+            },
+            401: {
+              description: 'Unauthorized access',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
                 },
               },
             },
-          },
-          500: {
-            description: 'Internal server error',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/errorMessage',
+            500: {
+              description: 'Internal server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
                 },
               },
             },
@@ -284,6 +288,255 @@ const options = {
           },
         },
       },
+      '/districts': {
+        get: {
+          tags: ['DISTRICTS'],
+          summary: 'Getting all districts',
+          responses: {
+            200: {
+              description: 'Success',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/successMessage',
+                  },
+                },
+              },
+            },
+
+            500: {
+              description: 'Internal server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      '/districts/newDistrict': {
+        post: {
+          tags: ['DISTRICTS'],
+          summary: 'Adding a new district',
+          requestBody: {
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/district',
+                },
+              },
+            },
+            required: true,
+          },
+          responses: {
+            201: {
+              description: 'Successful created new district',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/successMessage',
+                  },
+                },
+              },
+            },
+            401: {
+              description: 'Unathourized access',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+            409: {
+              description: 'Conflicting entity',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+            422: {
+              description: 'Unprocessable entity',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+            500: {
+              description: 'Internal server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      '/districts/:districtName': {
+        get: {
+          tags: ['DISTRICTS'],
+          summary: 'Getting a single district with name',
+          responses: {
+            200: {
+              description: 'Success',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/successMessage',
+                  },
+                },
+              },
+            },
+
+            500: {
+              description: 'Internal server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+          },
+        },
+        put: {
+          tags: ['DISTRICTS'],
+          summary: 'Editing a district that already exists',
+          requestBody: {
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/district',
+                },
+              },
+            },
+            required: true,
+          },
+          responses: {
+            201: {
+              description: 'Successfully edited district',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/successMessage',
+                  },
+                },
+              },
+            },
+            401: {
+              description: 'Unathourized access',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+            409: {
+              description: 'Conflicting entity',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+            422: {
+              description: 'Unprocessable entity',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+            500: {
+              description: 'Internal server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+          },
+        },
+        delete: {
+          tags: ['DISTRICTS'],
+          summary: 'Deleting a district that already exists',
+          responses: {
+            204: {
+              description: 'Successfully deleted district',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/successMessage',
+                  },
+                },
+              },
+            },
+            401: {
+              description: 'Unathourized access',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+            409: {
+              description:
+                'Conflicting district name, district does not exists',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+            422: {
+              description: 'Unprocessable entity',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+            500: {
+              description: 'Internal server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/errorMessage',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     },
     components: {
       schemas: {
@@ -313,6 +566,55 @@ const options = {
             password: {
               type: 'string',
               description: "user's password, mimimum of 6 characters",
+            },
+          },
+        },
+        district: {
+          type: 'object',
+          required: [
+            'districtName',
+            'districtChairman',
+            'seniorDistrictSecretary',
+            'districtHeadQuatersAddress',
+            'state',
+            'telephoneNumber',
+            'email',
+          ],
+          properties: {
+            districtName: {
+              type: 'string',
+              description: 'The name of the district',
+            },
+            districtChairman: {
+              type: 'string',
+              description: 'The name of the chairman of the district',
+            },
+            seniorDistrictSecretary: {
+              type: 'string',
+              description: 'The name of the secretary of the district',
+            },
+            districtHeadQuatersAddress: {
+              type: 'string',
+              description: 'The address of the district headquaters',
+            },
+            state: {
+              type: 'string',
+              description: 'The state where the district is located',
+            },
+            telephoneNumber: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+              description:
+                'An array of telephone numbers available in the district',
+            },
+            email: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+              description: 'An array of emails availabe in the district',
             },
           },
         },
@@ -384,7 +686,7 @@ const options = {
       },
     },
   },
-  apis: ['./routes/authRoutes.js'],
+  apis: ['./routes/*.js'],
 };
 
 module.exports = options;
