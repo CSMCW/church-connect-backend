@@ -3,8 +3,7 @@ const Joi = require('joi');
 const name = Joi.string()
   .pattern(/^([a-z]|[A-Z]| |,|_|-)+$/)
   .min(3)
-  .max(50)
-  .lowercase();
+  .max(50);
 
 const email = Joi.array().items(Joi.string().email().lowercase());
 
