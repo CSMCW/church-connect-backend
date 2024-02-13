@@ -8,7 +8,7 @@ const districtRoute = Router();
 districtRoute.get('/', districtControllers.getDistricts);
 
 //handling getting a specific district
-districtRoute.get('/:districtName', districtControllers.getSpecificDistrict);
+districtRoute.get('/:districtId', districtControllers.getDistrictById);
 
 //handling adding a new district
 districtRoute.post(
@@ -19,16 +19,16 @@ districtRoute.post(
 
 //handling editing a district
 districtRoute.put(
-  '/:districtName',
+  '/:districtId',
   authHelpers.authenticateToken,
-  districtControllers.editDistrict,
+  districtControllers.editDistrictById,
 );
 
 //handling deleting a district
 districtRoute.delete(
-  '/:districtName',
+  '/:districtId',
   authHelpers.authenticateToken,
-  districtControllers.deleteDistrict,
+  districtControllers.deleteDistrictById,
 );
 
 module.exports = districtRoute;

@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+const { v4: uuidv4 } = require('uuid');
 
 const districtValidator = require('../schemas/districtSchema');
 const helpers = require('../utils/helpers');
@@ -27,13 +28,13 @@ const getDistricts = async (req, res, next) => {
 };
 
 //controller for getting specific district
-const getSpecificDistrict = async (req, res, next) => {
+const getDistrictById = async (req, res, next) => {
   try {
-    const districtName = req.params.districtName;
+    const districtId = req.params.districtId;
     const queryOptions = {
       tableName,
-      column: 'districtName',
-      columnValue: districtName,
+      column: 'districtId',
+      columnValue: districtId,
     };
     // querying database for all districts
     const existingData = await dbHelpers.queryDatabase(queryOptions);
@@ -77,6 +78,7 @@ const addDistrict = async (req, res, next) => {
     if (existingRecord.length > 0) {
       throw new createError.Conflict('District already exists');
     } else {
+      validatedResult.districtId = uuidv4();
       const dbInsertOptions = {
         tableName,
         data: validatedResult,
@@ -98,20 +100,20 @@ const addDistrict = async (req, res, next) => {
 };
 
 //deleting a district
-const deleteDistrict = async (req, res, next) => {
+const deleteDistrictById = async (req, res, next) => {
   try {
-    const districtName = req.params.districtName;
+    const districtId = req.params.districtId;
     const dbQueryOPtions = {
       tableName,
-      column: 'districtName',
-      columnValue: districtName,
+      column: 'districtId',
+      columnValue: districtId,
     };
     const existingData = await dbHelpers.queryDatabase(dbQueryOPtions);
     if (existingData.length > 0) {
       const deleteOptions = {
         tableName,
-        column: 'districtName',
-        columnValue: districtName,
+        column: 'districtId',
+        columnValue: districtId,
       };
       const deleted = await dbHelpers.deleteRowFromDatabase(deleteOptions);
       if (deleted) {
@@ -131,7 +133,7 @@ const deleteDistrict = async (req, res, next) => {
 };
 
 //updating a district
-const editDistrict = async (req, res, next) => {
+const editDistrictById = async (req, res, next) => {
   try {
     const { value: validatedResult, error: validationError } =
       districtValidator.createDistrictSchema.validate(req.body);
@@ -142,18 +144,18 @@ const editDistrict = async (req, res, next) => {
       );
     }
 
-    const oldDistrictName = req.params.districtName;
+    const districtId = req.params.districtId;
     const dbQueryOPtions = {
       tableName,
-      column: 'districtName',
-      columnValue: oldDistrictName,
+      column: 'districtId',
+      columnValue: districtId,
     };
     const existingData = await dbHelpers.queryDatabase(dbQueryOPtions);
     if (existingData.length > 0) {
       const updateOptions = {
         tableName,
         data: validatedResult,
-        match: { districtName: oldDistrictName },
+        match: { districtId: districtId },
       };
 
       const updated = await dbHelpers.updateRowOnDatabase(updateOptions);
@@ -175,10 +177,10 @@ const editDistrict = async (req, res, next) => {
 
 const districtControllers = {
   getDistricts,
-  getSpecificDistrict,
+  getDistrictById,
   addDistrict,
-  editDistrict,
-  deleteDistrict,
+  editDistrictById,
+  deleteDistrictById,
 };
 
 module.exports = districtControllers;

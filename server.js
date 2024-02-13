@@ -41,14 +41,18 @@ app.get('/health', (req, res) => {
 });
 
 //handling all routes with /auth/...
-app.use('/auth', authRoute);
+app.use('/v1/api/auth', authRoute);
 
 //handling all routes with /districts/...
-app.use('/districts', districtRoute);
+app.use('/v1/api/districts', districtRoute);
 
 //handling documentation route.
 const swaggerOptions = swaggerJsdoc(swaggerDocs);
-app.use('/documentations', swaggerUi.serve, swaggerUi.setup(swaggerOptions));
+app.use(
+  '/v1/api/documentations',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerOptions),
+);
 
 //handling not found routes
 app.use((req, res, next) => {
