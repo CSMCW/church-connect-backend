@@ -12,6 +12,10 @@ const options = {
         url: 'http://localhost:6244',
         description: 'Development server',
       },
+      {
+        url: 'https://church-connect.onrender.com',
+        description: 'Production server',
+      },
     ],
     tags: [
       {
@@ -25,7 +29,7 @@ const options = {
       },
     ],
     paths: {
-      '/auth/signup': {
+      '/v1/api/auth/signup': {
         post: {
           tags: ['AUTH'],
           summary: 'Signing up a new user',
@@ -83,7 +87,7 @@ const options = {
           },
         },
       },
-      '/auth/login': {
+      '/v1/api/auth/login': {
         post: {
           tags: ['AUTH'],
           summary: 'Logging in a user.',
@@ -141,10 +145,15 @@ const options = {
           },
         },
       },
-      '/auth/logout': {
+      '/v1/api/auth/logout': {
         delete: {
           tags: ['AUTH'],
           summary: 'Logging out a user.',
+          security: [
+            {
+              cookieAuth: [],
+            },
+          ],
           responses: {
             204: {
               description: 'Successful logout',
@@ -172,7 +181,7 @@ const options = {
           },
         },
       },
-      '/auth/forgotPassword': {
+      '/v1/api/auth/forgotPassword': {
         post: {
           tags: ['AUTH'],
           summary: 'Forgot password',
@@ -230,7 +239,7 @@ const options = {
           },
         },
       },
-      '/auth/resetPassword/:token': {
+      '/v1/api/auth/resetPassword/:token': {
         patch: {
           tags: ['AUTH'],
           summary: 'Reseting a new password.',
@@ -288,7 +297,7 @@ const options = {
           },
         },
       },
-      '/districts': {
+      '/v1/api/districts': {
         get: {
           tags: ['DISTRICTS'],
           summary: 'Getting all districts',
@@ -317,10 +326,15 @@ const options = {
           },
         },
       },
-      '/districts/newDistrict': {
+      '/v1/api/districts/newDistrict': {
         post: {
           tags: ['DISTRICTS'],
           summary: 'Adding a new district',
+          security: [
+            {
+              cookieAuth: [],
+            },
+          ],
           requestBody: {
             content: {
               'application/json': {
@@ -385,7 +399,7 @@ const options = {
           },
         },
       },
-      '/districts/:districtName': {
+      '/v1/api/districts/:districtId': {
         get: {
           tags: ['DISTRICTS'],
           summary: 'Getting a single district with name',
@@ -416,6 +430,11 @@ const options = {
         put: {
           tags: ['DISTRICTS'],
           summary: 'Editing a district that already exists',
+          security: [
+            {
+              cookieAuth: [],
+            },
+          ],
           requestBody: {
             content: {
               'application/json': {
@@ -482,6 +501,11 @@ const options = {
         delete: {
           tags: ['DISTRICTS'],
           summary: 'Deleting a district that already exists',
+          security: [
+            {
+              cookieAuth: [],
+            },
+          ],
           responses: {
             204: {
               description: 'Successfully deleted district',
@@ -682,6 +706,13 @@ const options = {
               description: 'Data returned from server.',
             },
           },
+        },
+      },
+      securitySchemes: {
+        cookieAuth: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'access_token',
         },
       },
     },
